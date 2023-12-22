@@ -125,6 +125,7 @@ firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
 });
 
 const Home = () => {
+  const [isLoading, setIsLoading] = useState(true);  // ローディング状態の追加
   const userId = firebase.auth().currentUser?.uid;
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -194,6 +195,7 @@ const Home = () => {
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
+      setIsLoading(true);
       if (user) {
         setIsLoggedIn(true);
         try {
@@ -219,10 +221,17 @@ const Home = () => {
         setIsLoggedIn(false);
         setUserProfile(null);
       }
+
+      setIsLoading(false);  // ローディング終了
     });
+
 
     return () => unsubscribe();
   }, []);
+
+  if (isLoading) {
+    return <div css={wrapperStyle}></div>;
+  }
 
   // ユーザーがログインしていない場合はログインフォームを表示
   if (!isLoggedIn) {
