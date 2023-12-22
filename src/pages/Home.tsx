@@ -230,7 +230,7 @@ const Home = () => {
   }, []);
 
   if (isLoading) {
-    return <div css={wrapperStyle}></div>;
+    return <div css={wrapperStyle}>ローディング中</div>;
   }
 
   // ユーザーがログインしていない場合はログインフォームを表示
