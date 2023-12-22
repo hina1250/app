@@ -7,7 +7,7 @@ import { images } from "./Data/defaultChatData";
 import { getStrTime } from "./logics/getChatData";
 import firebase from "firebase/compat/app";
 import searchImg from "../assets/images/icon/search.svg";
-import {Message} from "./types/messageType";
+import { Message } from "./types/messageType";
 
 const wrapperStyle = css`
   padding-top: 20px;
@@ -162,7 +162,6 @@ const Chat = () => {
         console.error("Error fetching user data:", error);
       });
   }, [loggedInUserId]);
-
 
   return (
     <div css={wrapperStyle}>

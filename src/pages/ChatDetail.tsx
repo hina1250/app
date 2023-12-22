@@ -28,8 +28,8 @@ import {
 import { formatDateTime } from "./logics/getDay";
 import { Link, useParams } from "react-router-dom";
 import { getStrTime } from "./logics/getChatData";
-import {ChatLog} from "./types/chatLogType";
-import {UserProfile} from "./types/userProfileType";
+import { ChatLog } from "./types/chatLogType";
+import { UserProfile } from "./types/userProfileType";
 
 const ChatDetail = () => {
   const messagesElementRef = useRef<HTMLDivElement | null>(null);

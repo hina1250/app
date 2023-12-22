@@ -5,7 +5,7 @@ import tanakayumiImage from "../../assets/images/manager/tanakayumi.jpg";
 
 type Images = {
   [key: string]: string;
-}
+};
 
 export const images: Images = {
   yamadahanako: yamadahanakoImage,
