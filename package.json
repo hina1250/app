@@ -30,6 +30,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
+  "homepage": "https://hina1250.github.io/app/",
   "browserslist": {
     "production": [
       ">0.2%",
