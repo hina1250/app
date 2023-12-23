@@ -59,7 +59,8 @@ const messageListStyle = css`
 `;
 
 const messageStyle = css`
-  display: flex;
+  display: grid;
+  grid-template-columns: 56px 1fr 50px;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
@@ -69,6 +70,7 @@ const messageStyle = css`
   & > img {
     width: 56px;
     height: 56px;
+    object-fit: cover;
     border-radius: 50%;
   }
   &:last-child {
