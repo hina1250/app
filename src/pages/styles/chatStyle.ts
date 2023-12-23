@@ -8,7 +8,7 @@ export const chatWrapperPositionStyle = css`
   transform: translateX(-50%);
   max-width: 600px;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   background-color: #eee;
   overflow: hidden;
 `;
@@ -30,7 +30,8 @@ export const chatUserStyle = css`
   padding-bottom: 16px;
   border-bottom: 2px solid #333;
   position: fixed;
-  top: 0;
+  top:0;
+  left:0;
   z-index: 20;
   & > a {
     position: relative;
