@@ -204,8 +204,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/record" element={<Record />} />
-        <Route path="/contact" element={<Contact />} />
         <Route path="/contact" element={<Contact />}>
+          <Route index element={<Chat />} />
           <Route path="chat" element={<Chat />} />
           <Route path="board" element={<Board />} />
         </Route>
