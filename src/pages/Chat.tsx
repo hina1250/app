@@ -7,7 +7,6 @@ import { getStrTime } from "./logics/getChatData";
 import firebase from "firebase/compat/app";
 import searchImg from "../assets/images/icon/search.svg";
 import { Message } from "./types/messageType";
-import { UserIdProfile } from "./types/userProfileType";
 import {ContactContextType} from "./types/contactContextType";
 
 const wrapperStyle = css`
