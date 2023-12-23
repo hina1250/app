@@ -82,7 +82,7 @@ const listStyle = css`
   grid-template-rows: 56px;
   align-items: center;
   justify-items: flex-start;
-  gap: 10px;
+  gap: 16px;
   padding: 10px;
   border-radius: 8px;
   transition: background-color 0.2s;
@@ -93,12 +93,25 @@ const listStyle = css`
   }
 `;
 
+const listTextStyle = css`
+  text-align: left;
+`;
+
 const modalUserIconStyle = css`
   border-radius: 50%;
   width: 56px;
   height: 56px;
   object-fit: cover;
 `;
+const modalUserNameStyle = css`
+  font-size: 16px;
+  margin-bottom: 2px;
+`;
+const modalUserCommentStyle = css`
+  font-size: 12px;
+  color: #666666;
+`;
+
 
 const Contact = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -122,24 +135,6 @@ const Contact = () => {
 
     fetchUsers();
   }, [loggedInUserId]);
-
-  // タブのインデックスをURLから決定する関数
-  const getSelectedIndex = (path: string) => {
-    if (path.endsWith("/contact/chat")) {
-      return 0;
-    } else if (path.endsWith("/contact/board")) {
-      return 1;
-    }
-    return -1;
-  };
-  const selectedIndex = getSelectedIndex(location.pathname);
-
-  // コンポーネントのマウント時にチャットタブに移動する
-  useEffect(() => {
-    if (selectedIndex === -1) {
-      navigate("/contact/chat");
-    }
-  }, [navigate]);
 
   const handleUserSelect = (userId: string) => {
     // ユーザーを選択したときの処理
@@ -190,7 +185,10 @@ const Contact = () => {
                   width={56}
                   height={56}
                 />
-                <p>{user.name}</p>
+                <div css={listTextStyle}>
+                  <p css={modalUserNameStyle}>{user.name}</p>
+                  <p css={modalUserCommentStyle}>{user.comment}</p>
+                </div>
               </button>
             ))}
           </ChatUserModal>

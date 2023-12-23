@@ -8,6 +8,7 @@ import firebase from "firebase/compat/app";
 import searchImg from "../assets/images/icon/search.svg";
 import { Message } from "./types/messageType";
 import { UserIdProfile } from "./types/userProfileType";
+import {ContactContextType} from "./types/contactContextType";
 
 const wrapperStyle = css`
   padding-top: 20px;
@@ -101,7 +102,7 @@ const messageTextStyle = css`
 const Chat = () => {
   const [lastMessages, setLastMessages] = useState<Message[]>([]);
   const loggedInUserId = firebase.auth().currentUser?.uid;
-  const { users } = useOutletContext<{ users: UserIdProfile[] }>();
+  const { users } = useOutletContext<ContactContextType>();
 
   useEffect(() => {
     const fetchMessages = async () => {
