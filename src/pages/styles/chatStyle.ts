@@ -8,7 +8,7 @@ export const chatWrapperPositionStyle = css`
   transform: translateX(-50%);
   max-width: 600px;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   background-color: #eee;
   overflow: hidden;
 `;
