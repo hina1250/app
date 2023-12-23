@@ -184,6 +184,7 @@ const ChatDetail = () => {
           <img
             src={userInformation ? userInformation?.image : undefined}
             alt={userInformation?.name}
+            css={chatUserIconStyle}
             width={40}
             height={40}
           />
