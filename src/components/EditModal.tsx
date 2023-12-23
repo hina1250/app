@@ -2,6 +2,7 @@
 // ユーザープロフィールの型定義
 import { useState } from "react";
 import { css } from "@emotion/react";
+import { UserProfile } from "../pages/types/userProfileType";
 
 const modalWrapperStyle = css`
   position: fixed;
@@ -54,12 +55,6 @@ const saveButtonStyle = css`
   margin-right: auto;
   margin-left: auto;
 `;
-
-type UserProfile = {
-  name: string;
-  comment: string;
-  image: string;
-};
 
 // 編集モーダルコンポーネント
 type EditModalProps = {

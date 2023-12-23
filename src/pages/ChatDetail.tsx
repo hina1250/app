@@ -29,7 +29,7 @@ import { formatDateTime } from "./logics/getDay";
 import { Link, useParams } from "react-router-dom";
 import { getStrTime } from "./logics/getChatData";
 import { ChatLog } from "./types/chatLogType";
-import { UserProfile } from "./types/userProfileType";
+import { UserIdProfile } from "./types/userProfileType";
 
 const ChatDetail = () => {
   const messagesElementRef = useRef<HTMLDivElement | null>(null);
@@ -37,7 +37,7 @@ const ChatDetail = () => {
   const [chatLogs, setChatLogs] = useState<ChatLog[]>([]);
   const [msg, setMsg] = useState("");
   const loggedInUserId = firebase.auth().currentUser?.uid;
-  const [userInformation, setUserInformation] = useState<UserProfile | null>(
+  const [userInformation, setUserInformation] = useState<UserIdProfile | null>(
     null,
   );
 

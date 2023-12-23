@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import db from "../firebaseConfig";
-import { images } from "./Data/defaultChatData";
 import { getStrTime } from "./logics/getChatData";
 import firebase from "firebase/compat/app";
 import searchImg from "../assets/images/icon/search.svg";
 import { Message } from "./types/messageType";
+import { UserIdProfile } from "./types/userProfileType";
 
 const wrapperStyle = css`
   padding-top: 20px;
@@ -97,71 +97,45 @@ const messageTextStyle = css`
 const Chat = () => {
   const [lastMessages, setLastMessages] = useState<Message[]>([]);
   const loggedInUserId = firebase.auth().currentUser?.uid;
+  const { users } = useOutletContext<{ users: UserIdProfile[] }>();
 
   useEffect(() => {
-    // Firestoreからユーザー一覧を取得
-    db.collection("users")
-      .get()
-      .then((querySnapshot) => {
-        const promises: Promise<void>[] = [];
-
-        querySnapshot.forEach((userDoc) => {
-          const userId = userDoc.id;
-          const userName = userDoc.data().name;
-          const userImage = userDoc.data().image;
-
-          // このユーザーとのチャットルームIDを生成
-          const chatroomId = [loggedInUserId, userId].sort().join("-");
-
-          // 各ユーザーの最新メッセージを取得するプロミスを作成
-          const promise = db
-            .collection("chatroom")
-            .doc(chatroomId)
-            .collection("messages")
-            .orderBy("date", "desc")
-            .limit(1)
-            .get()
-            .then((messageSnapshot) => {
-              const messageDoc = messageSnapshot.docs[0];
-              if (messageDoc) {
-                const newMessage = {
-                  sessionId: userId,
-                  id: messageDoc.id,
-                  name: userName,
-                  msg: messageDoc.data().msg,
-                  imageURL: userImage,
-                  date: new Date(messageDoc.data().date),
-                };
-
-                // 既存のメッセージを更新（または新しいメッセージを追加）
-                setLastMessages((prevMessages) => {
-                  const existingIndex = prevMessages.findIndex(
-                    (msg) => msg.sessionId === userId,
-                  );
-
-                  if (existingIndex >= 0) {
-                    // 既存のメッセージを新しいもので置き換える
-                    const updatedMessages = [...prevMessages];
-                    updatedMessages[existingIndex] = newMessage;
-                    return updatedMessages;
-                  } else {
-                    // 新しいメッセージを追加する
-                    return [...prevMessages, newMessage];
-                  }
-                });
-              }
-            });
-
-          promises.push(promise);
-        });
-
-        // すべてのプロミスが解決されるのを待つ
-        return Promise.all(promises);
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
+    const fetchMessages = async () => {
+      const promises: Promise<Message | null>[] = users.map((user) => {
+        const chatroomId = [loggedInUserId, user.id].sort().join("-");
+        return db
+          .collection("chatroom")
+          .doc(chatroomId)
+          .collection("messages")
+          .orderBy("date", "desc")
+          .limit(1)
+          .get()
+          .then((messageSnapshot) => {
+            const messageDoc = messageSnapshot.docs[0];
+            if (messageDoc) {
+              return {
+                sessionId: user.id,
+                id: messageDoc.id,
+                name: user.name,
+                msg: messageDoc.data().msg,
+                imageURL: user.image,
+                date: new Date(messageDoc.data().date),
+              };
+            }
+            return null;
+          });
       });
-  }, [loggedInUserId]);
+
+      const messages = await Promise.all(promises);
+      setLastMessages(
+        messages.filter((message): message is Message => message !== null),
+      );
+    };
+
+    if (users) {
+      fetchMessages();
+    }
+  }, [loggedInUserId, users]);
 
   return (
     <div css={wrapperStyle}>

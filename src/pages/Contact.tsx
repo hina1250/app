@@ -1,16 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import React, { FC, useEffect } from "react";
-import {
-  Link,
-  Outlet,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import React, { FC, useEffect, useState } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Tab } from "@headlessui/react";
 import plusIcon from "../assets/images/icon/plus.svg";
+import ChatUserModal from "../components/ChatUserModal";
+import { UserIdProfile } from "./types/userProfileType";
+import firebase from "firebase/compat/app";
+import db from "../firebaseConfig";
 
 const wrapperStyle = css`
   max-width: 600px;
@@ -79,9 +76,52 @@ const tabPanelStyle = css`
   border-top: 1px solid #333;
 `;
 
+const listStyle = css`
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  grid-template-rows: 56px;
+  align-items: center;
+  justify-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  @media (any-hover: hover) {
+    &:hover {
+      background-color: #eee;
+    }
+  }
+`;
+
+const modalUserIconStyle = css`
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+`;
+
 const Contact = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [users, setUsers] = useState<UserIdProfile[]>([]);
+  const loggedInUserId = firebase.auth().currentUser?.uid;
   const navigate = useNavigate();
-  const location = useLocation();
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const usersSnapshot = await db.collection("users").get();
+      const usersData = usersSnapshot.docs
+        .filter((doc) => doc.id !== loggedInUserId) // ログインユーザーを除外
+        .map((doc) => ({
+          id: doc.id,
+          name: doc.data().name,
+          image: doc.data().image,
+          comment: doc.data().comment,
+        }));
+      setUsers(usersData);
+    };
+
+    fetchUsers();
+  }, [loggedInUserId]);
 
   // タブのインデックスをURLから決定する関数
   const getSelectedIndex = (path: string) => {
@@ -101,11 +141,16 @@ const Contact = () => {
     }
   }, [navigate]);
 
+  const handleUserSelect = (userId: string) => {
+    // ユーザーを選択したときの処理
+    navigate(`/contact/chat/${userId}`);
+  };
+
   return (
     <div css={wrapperStyle}>
       <div css={titleWrapperStyle}>
         <h1 css={titleStyle}>連絡</h1>
-        <button>
+        <button onClick={() => setIsModalOpen(true)}>
           <img src={plusIcon} alt="追加" />
         </button>
       </div>
@@ -129,7 +174,27 @@ const Contact = () => {
         </Tab.List>
       </Tab.Group>
       <div css={tabPanelStyle}>
-        <Outlet />
+        <Outlet context={{ isModalOpen, setIsModalOpen, users }} />
+        {isModalOpen && (
+          <ChatUserModal onClose={() => setIsModalOpen(false)}>
+            {users.map((user) => (
+              <button
+                css={listStyle}
+                key={user.id}
+                onClick={() => handleUserSelect(user.id)}
+              >
+                <img
+                  src={user.image}
+                  css={modalUserIconStyle}
+                  alt=""
+                  width={56}
+                  height={56}
+                />
+                <p>{user.name}</p>
+              </button>
+            ))}
+          </ChatUserModal>
+        )}
       </div>
     </div>
   );
