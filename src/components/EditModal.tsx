@@ -58,21 +58,15 @@ const saveButtonStyle = css`
 
 // 編集モーダルコンポーネント
 type EditModalProps = {
+  /* ユーザーのプロフィール */
   userProfile: UserProfile;
+  /* 保存処理 */
   onSave: (profile: UserProfile) => void;
 };
 
 // 編集モーダルコンポーネント
 const EditModal: React.FC<EditModalProps> = ({ userProfile, onSave }) => {
   const [editedProfile, setEditedProfile] = useState(userProfile);
-
-  // 画像の変更
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const newImage = URL.createObjectURL(event.target.files[0]);
-      setEditedProfile({ ...editedProfile, image: newImage });
-    }
-  };
 
   // 名前の変更
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -112,7 +112,6 @@ const modalUserCommentStyle = css`
   color: #666666;
 `;
 
-
 const Contact = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [users, setUsers] = useState<UserIdProfile[]>([]);

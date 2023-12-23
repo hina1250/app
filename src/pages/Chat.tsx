@@ -3,11 +3,11 @@ import { css } from "@emotion/react";
 import React, { useEffect, useState } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 import db from "../firebaseConfig";
-import { getStrTime } from "./logics/getChatData";
+import { getStrTime, getTime } from "./logics/getChatData";
 import firebase from "firebase/compat/app";
 import searchImg from "../assets/images/icon/search.svg";
 import { Message } from "./types/messageType";
-import {ContactContextType} from "./types/contactContextType";
+import { ContactContextType } from "./types/contactContextType";
 
 const wrapperStyle = css`
   padding-top: 20px;
@@ -174,7 +174,7 @@ const Chat = () => {
                   <p css={messageUserStyle}>{message.name}</p>
                   <p css={messageTextStyle}>{message.msg}</p>
                 </div>
-                <span>{getStrTime(message.date)}</span>
+                <span>{getTime(message.date)}</span>
               </Link>
             </li>
           ))}

@@ -1,4 +1,4 @@
-import {UserIdProfile} from "./userProfileType";
+import { UserIdProfile } from "./userProfileType";
 
 export type ContactContextType = {
   isModalOpen: boolean;

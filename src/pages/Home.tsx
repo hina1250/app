@@ -11,6 +11,7 @@ import settingIcon from "../assets/images/icon/setting.svg";
 import notificationIcon from "../assets/images/icon/notification.svg";
 import { useParams } from "react-router-dom";
 import { UserProfile } from "./types/userProfileType";
+import Modal from "../components/Modal";
 
 const wrapperStyle = css`
   max-width: 600px;
@@ -121,6 +122,7 @@ const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   // 編集モーダルの表示・非表示
   const handleEditClick = () => {
@@ -218,6 +220,18 @@ const Home = () => {
     return () => unsubscribe();
   }, []);
 
+  // ログアウト処理
+  const handleLogout = async () => {
+    try {
+      await firebase.auth().signOut();
+      // ログアウト後の処理（必要に応じて）
+      console.log("ログアウトしました");
+      setIsLogoutModalOpen(false); // モーダルを閉じる
+    } catch (error) {
+      console.error("ログアウト中にエラーが発生しました", error);
+    }
+  };
+
   if (isLoading) {
     return <div css={wrapperStyle}></div>;
   }
@@ -255,6 +269,23 @@ const Home = () => {
       <div css={titleWrapperStyle}>
         <h1 css={titleStyle}>ホーム</h1>
         <div css={titleIconsStyle}>
+          <button
+            onClick={() => {
+              setIsLogoutModalOpen(!isLogoutModalOpen);
+            }}
+          >
+            ログアウト
+          </button>
+          {isLogoutModalOpen && (
+            <Modal
+              text={"ログアウトしますか？"}
+              onClick={handleLogout}
+              onCancel={() => {
+                setIsLogoutModalOpen(false);
+              }}
+              buttonText={"ログアウト"}
+            />
+          )}
           <button css={titleIconStyle}>
             <img src={notificationIcon} alt="通知" width={18} height={24} />
           </button>
