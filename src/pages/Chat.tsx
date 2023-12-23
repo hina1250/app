@@ -67,6 +67,8 @@ const messageStyle = css`
   border-top: 1px solid #333;
   transition: background-color 0.2s ease;
   & > img {
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
   }
   &:last-child {
