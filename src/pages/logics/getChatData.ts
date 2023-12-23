@@ -73,7 +73,7 @@ export const getTime = (time: Date | number) => {
 
   // 日付の差が7日未満の場合は曜日を返す
   if (diffInDays < 7) {
-    const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+    const weekdays = ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"];
     return weekdays[inputDate.getDay()];
   }
 

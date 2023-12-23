@@ -98,6 +98,11 @@ const messageTextStyle = css`
   font-size: 14px;
 `;
 
+const messageDateStyle = css`
+  justify-self: flex-end;
+  color: #999;
+`;
+
 const Chat = () => {
   const [lastMessages, setLastMessages] = useState<Message[]>([]);
   const loggedInUserId = firebase.auth().currentUser?.uid;
@@ -174,7 +179,7 @@ const Chat = () => {
                   <p css={messageUserStyle}>{message.name}</p>
                   <p css={messageTextStyle}>{message.msg}</p>
                 </div>
-                <span>{getTime(message.date)}</span>
+                <span css={messageDateStyle}>{getTime(message.date)}</span>
               </Link>
             </li>
           ))}
