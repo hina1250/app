@@ -10,6 +10,7 @@ import { handleLogin } from "./logics/getChatData";
 import settingIcon from "../assets/images/icon/setting.svg";
 import notificationIcon from "../assets/images/icon/notification.svg";
 import { useParams } from "react-router-dom";
+import { UserProfile } from "./types/userProfileType";
 
 const wrapperStyle = css`
   max-width: 600px;
@@ -72,17 +73,6 @@ const profileCommentStyle = css`
   color: #666666;
 `;
 
-const editButtonStyle = css`
-  justify-items: flex-end;
-`;
-
-// ユーザープロフィールの型定義
-type UserProfile = {
-  name: string;
-  comment: string;
-  image: string;
-};
-
 type LoginFormProps = {
   onLogin: (email: string, password: string) => void;
 };
@@ -125,7 +115,7 @@ firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
 });
 
 const Home = () => {
-  const [isLoading, setIsLoading] = useState(true);  // ローディング状態の追加
+  const [isLoading, setIsLoading] = useState(true); // ローディング状態の追加
   const userId = firebase.auth().currentUser?.uid;
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -222,9 +212,8 @@ const Home = () => {
         setUserProfile(null);
       }
 
-      setIsLoading(false);  // ローディング終了
+      setIsLoading(false); // ローディング終了
     });
-
 
     return () => unsubscribe();
   }, []);
