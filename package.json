@@ -26,11 +26,8 @@
     "build": "BUILD_PATH='./dist' react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "prettier --write src",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "format": "prettier --write src"
   },
-  "homepage": "https://hina1250.github.io/app/",
   "browserslist": {
     "production": [
       ">0.2%",

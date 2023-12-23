@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import React, { FC, ReactNode } from "react";
+import closeIcon from "../assets/images/icon/close-black.svg";
 
 const wrapperStyle = css`
   /* モーダルのスタイル */
@@ -47,7 +48,7 @@ const ChatUserModal: FC<Props> = ({ onClose, children }) => {
   return (
     <div css={wrapperStyle}>
       <button css={closeButtonStyle} onClick={onClose}>
-        閉じる
+        <img src={closeIcon} alt="閉じる" width={40} height={40} />
       </button>
       <div css={usersStyle}>{children}</div>
     </div>
