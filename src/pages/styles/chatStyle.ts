@@ -6,6 +6,8 @@ export const chatWrapperPositionStyle = css`
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+  display: grid;
+  grid-template-rows: 88px 1fr auto;
   max-width: 600px;
   width: 100%;
   height: 100dvh;
@@ -14,11 +16,9 @@ export const chatWrapperPositionStyle = css`
 `;
 export const chatWrapperStyle = css`
   width: 100%;
-  bottom: 60px;
   overflow-y: scroll;
-  position: absolute;
-  padding: 160px 30px 30px;
-  height: 100vh;
+  overflow-x: hidden;
+  padding: 10px 20px;
 `;
 export const chatUserStyle = css`
   display: flex;
@@ -29,7 +29,7 @@ export const chatUserStyle = css`
   padding-top: 30px;
   padding-bottom: 16px;
   border-bottom: 2px solid #333;
-  position: fixed;
+  position: relative;
   top: 0;
   z-index: 20;
   & > a {
@@ -86,6 +86,7 @@ export const chatStyle = css`
   line-height: 1.5;
   align-items: center;
   color: #fff;
+  white-space: pre-wrap;
   &::after {
     position: absolute;
     bottom: -8px;
@@ -130,26 +131,30 @@ export const timeStyle = css`
 `;
 export const formStyle = css`
   display: flex;
-  padding: 40px 20px;
+  padding: 10px 20px;
   gap: 20px;
   justify-content: space-around;
   align-items: center;
-  position: fixed;
+  position: relative;
   left: 50%;
   bottom: 0;
   max-width: 600px;
   width: 100%;
-  height: 80px;
+  height: min-content;
   background-color: #fff;
   border-top: 2px solid #333;
   transform: translateX(-50%);
 `;
 export const inputStyle = css`
-  border-radius: 100px;
+  border-radius: 8px;
+  min-height: 40px;
   border: 2px solid #333;
-  padding: 15px 20px;
+  padding: 4px 10px;
   width: 100%;
   position: relative;
   z-index: 1;
   font-size: 15px;
+  line-height: 20px;
+  overflow-y: hidden;
+  resize: none;
 `;

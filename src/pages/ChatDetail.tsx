@@ -37,6 +37,7 @@ const ChatDetail = () => {
   const [chatLogs, setChatLogs] = useState<ChatLog[]>([]);
   const [msg, setMsg] = useState("");
   const loggedInUserId = firebase.auth().currentUser?.uid;
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [userInformation, setUserInformation] = useState<UserIdProfile | null>(
     null,
   );
@@ -164,6 +165,20 @@ const ChatDetail = () => {
     }
   };
 
+// テキストエリアの高さを調整する関数
+  useEffect(() => {
+    const resizeTextarea = () => {
+      const textarea = textareaRef.current;
+      if (!textarea) return;
+
+      const lineHeight = parseInt(getComputedStyle(textarea).lineHeight, 12);
+      const lines = (msg + '\n').match(/\n/g)?.length || 1;
+      textarea.style.height = `${lineHeight * lines}px`;
+    };
+
+    resizeTextarea();
+  }, [msg]);
+
   // 新しいメッセージのスクロール
   useEffect(() => {
     if (messagesElementRef.current) {
@@ -172,7 +187,7 @@ const ChatDetail = () => {
         behavior: "auto",
       });
     }
-  }, [chatLogs]);
+  }, [setMsg, chatLogs]);
 
   return (
     <div css={chatWrapperPositionStyle}>
@@ -239,14 +254,14 @@ const ChatDetail = () => {
       {/* メッセージ入力 */}
       <form onSubmit={submitMsg} css={formStyle}>
         <img src={plusIcon} alt="ファイルを追加" />
-        <input
-          type="text"
+        <textarea
           value={msg}
+          ref={textareaRef}
           onChange={(e) => setMsg(e.target.value)}
           css={inputStyle}
           placeholder={"メッセージを入力"}
         />
-        <input type="image" src={sendIcon} alt="" />
+        <input type="image" src={sendIcon} alt="" width={32} height={32} />
       </form>
     </div>
   );

@@ -13,11 +13,11 @@ const wrapperStyle = css`
   z-index: 30;
   background-color: #fff;
   height: 70vh;
-  max-width: 500px;
-  width: 80vw;
+  max-width: 540px;
+  width: 85vw;
   border: 2px solid #333;
   border-radius: 10px;
-  padding: 30px;
+  padding: 30px 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -34,7 +34,7 @@ const usersStyle = css`
   padding: 50px 20px;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 18px;
 `;
 
 type Props = {

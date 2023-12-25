@@ -91,6 +91,9 @@ const listStyle = css`
       background-color: #eee;
     }
   }
+  @media (max-width: 500px) {
+    background-color: #eee;
+  }
 `;
 
 const listTextStyle = css`
