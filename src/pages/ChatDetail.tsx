@@ -3,7 +3,6 @@ import React, { useState, useMemo, useEffect, FC, useRef } from "react";
 import firebase from "firebase/compat/app";
 import db from "../firebaseConfig";
 import { onSnapshot } from "firebase/firestore";
-import "../components/contact/chat.css";
 import sendIcon from "../assets/images/icon/send.svg";
 import plusIcon from "../assets/images/icon/plus.svg";
 import backIcon from "../assets/images/icon/back.svg";

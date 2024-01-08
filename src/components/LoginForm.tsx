@@ -4,7 +4,6 @@ import { useState } from "react";
 import Modal from "./Modal";
 
 const loginFormStyle = css`
-  min-width: 340px;
   display: grid;
   gap: 30px;
   & > label {

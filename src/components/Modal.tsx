@@ -11,12 +11,12 @@ const modalWrapperStyle = css`
   transform: translate(-50%, -60%);
   z-index: 30;
   background-color: #fff;
+  width: 100%;
   height: auto;
-  max-width: 500px;
-  width: auto;
+  max-width: min(80vw, 500px);
   border: 2px solid #333;
   border-radius: 10px;
-  padding: 40px 60px;
+  padding: 40px 50px;
   display: flex;
   gap: 40px;
   flex-direction: column;
@@ -25,17 +25,23 @@ const modalWrapperStyle = css`
 
 const buttonsStyle = css`
   display: flex;
-  gap: 20px;
+  gap: 18px;
+  @media (max-width: 500px) {
+    display: grid;
+  }
 `;
 
 const buttonStyle = css`
   border: 2px solid #333;
   border-radius: 100px;
-  padding: 10px 30px;
+  padding: 15px 32px;
   background-color: #333333;
   color: #fff;
   margin-right: auto;
   margin-left: auto;
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 `;
 
 const cancelButtonStyle = css`
