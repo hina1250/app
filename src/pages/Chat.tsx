@@ -60,7 +60,7 @@ const messageListStyle = css`
 
 const messageStyle = css`
   display: grid;
-  grid-template-columns: 56px 1fr 50px;
+  grid-template-columns: 56px 1fr 70px;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
@@ -99,6 +99,7 @@ const messageTextStyle = css`
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 14px;
+  color: #999;
 `;
 
 const messageDateStyle = css`
