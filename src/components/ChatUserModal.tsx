@@ -50,9 +50,7 @@ const ChatUserModal: FC<Props> = ({ onClose, children }) => {
       <button css={closeButtonStyle} onClick={onClose}>
         <img src={closeIcon} alt="閉じる" width={40} height={40} />
       </button>
-      {
-        children && <div css={usersStyle}>{children}</div>
-      }
+      {children && <div css={usersStyle}>{children}</div>}
     </div>
   );
 };

@@ -72,9 +72,7 @@ const LoginForm: React.FC<Props> = ({ onLogin, loginError }) => {
           />
         </label>
       </form>
-      {loginError &&
-        <p css={errorTextStyle}>{loginError}</p>
-      }
+      {loginError && <p css={errorTextStyle}>{loginError}</p>}
     </Modal>
   );
 };

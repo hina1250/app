@@ -85,7 +85,7 @@ export const chatStyle = css`
   display: flex;
   flex-wrap: wrap;
   position: relative;
-  padding: 8px 14px;
+  padding: 8px 16px;
   border-radius: 12px;
   background: #333333;
   box-sizing: border-box;
@@ -93,6 +93,7 @@ export const chatStyle = css`
   align-items: center;
   color: #fff;
   white-space: pre-wrap;
+  font-size: 14px;
 `;
 export const chatFukidashiStyle = css`
   &::after {

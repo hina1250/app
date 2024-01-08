@@ -189,7 +189,7 @@ const Home = () => {
     return () => unsubscribe();
   }, []);
 
-// ログインエラーの状態
+  // ログインエラーの状態
   const [loginError, setLoginError] = useState("");
   const handleLogin = async (email: string, password: string) => {
     try {
@@ -199,7 +199,9 @@ const Home = () => {
       setLoginError("");
     } catch (error) {
       // ログイン失敗
-      setLoginError("ログインに失敗しました。メールアドレスとパスワードを確認してください。");
+      setLoginError(
+        "ログインに失敗しました。メールアドレスとパスワードを確認してください。",
+      );
       console.error(error);
     }
   };

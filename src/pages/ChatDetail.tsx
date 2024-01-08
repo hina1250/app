@@ -9,13 +9,15 @@ import backIcon from "../assets/images/icon/back.svg";
 import searchIcon from "../assets/images/icon/search.svg";
 import {
   balloonLeftStyle,
-  balloonStyle, chatFlexLeftStyle,
+  balloonStyle,
+  chatFlexLeftStyle,
   chatFlexStyle,
   chatFukidashiStyle,
   chatLeftStyle,
   chatStyle,
   chatUserFlexStyle,
-  chatUserIconStyle, chatUserNoIconStyle,
+  chatUserIconStyle,
+  chatUserNoIconStyle,
   chatUserStyle,
   chatWrapperPositionStyle,
   chatWrapperStyle,
@@ -237,6 +239,7 @@ const ChatDetail = () => {
                   balloonStyle,
                   !isOwnMessage && balloonLeftStyle,
                   memoizedTimeStamps[index] && messageMarginStyle,
+                  !memoizedTimeStamps[index] && chatUserNoIconStyle,
                 ]}
               >
                 <div css={[chatFlexStyle, !isOwnMessage && chatFlexLeftStyle]}>
@@ -249,7 +252,7 @@ const ChatDetail = () => {
                         alt={userInformation?.name}
                         width={40}
                         height={40}
-                        css={[chatUserIconStyle, !memoizedTimeStamps[index] && chatUserNoIconStyle]}
+                        css={chatUserIconStyle}
                       />
                     )}
                     <p
