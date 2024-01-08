@@ -62,15 +62,21 @@ export const dayStyle = css`
   color: #3c75a7;
   font-size: 15px;
   &:not(:first-child) {
-    margin-top: 100px;
+    margin-top: 80px;
   }
 `;
+
 export const balloonStyle = css`
-  margin: 20px 0;
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
+  margin: 2px 0;
 `;
+
+export const messageMarginStyle = css`
+  margin: 2px 0 20px;
+`;
+
 export const balloonLeftStyle = css`
   justify-content: flex-start;
 `;
@@ -87,6 +93,8 @@ export const chatStyle = css`
   align-items: center;
   color: #fff;
   white-space: pre-wrap;
+`;
+export const chatFukidashiStyle = css`
   &::after {
     position: absolute;
     bottom: -8px;
@@ -98,6 +106,7 @@ export const chatStyle = css`
     background-repeat: no-repeat;
   }
 `;
+
 export const chatLeftStyle = css`
   background: #fff;
   border: 2px solid #333;
@@ -110,10 +119,14 @@ export const chatLeftStyle = css`
 `;
 export const chatFlexStyle = css`
   display: flex;
-  gap: 4px;
-  flex-direction: column;
+  flex-direction: row-reverse;
+  gap: 8px;
   align-items: flex-end;
 `;
+export const chatFlexLeftStyle = css`
+  flex-direction: row;
+`;
+
 export const chatUserFlexStyle = css`
   display: flex;
   gap: 20px;
@@ -125,9 +138,13 @@ export const chatUserIconStyle = css`
   height: 40px;
   object-fit: cover;
 `;
+export const chatUserNoIconStyle = css`
+  margin-left: 60px;
+`;
 export const timeStyle = css`
   color: #8a8a8a;
   font-size: 12px;
+  padding-bottom: 2px;
 `;
 export const formStyle = css`
   display: flex;

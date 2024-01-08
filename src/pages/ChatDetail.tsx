@@ -10,18 +10,20 @@ import backIcon from "../assets/images/icon/back.svg";
 import searchIcon from "../assets/images/icon/search.svg";
 import {
   balloonLeftStyle,
-  balloonStyle,
+  balloonStyle, chatFlexLeftStyle,
   chatFlexStyle,
+  chatFukidashiStyle,
   chatLeftStyle,
   chatStyle,
   chatUserFlexStyle,
-  chatUserIconStyle,
+  chatUserIconStyle, chatUserNoIconStyle,
   chatUserStyle,
   chatWrapperPositionStyle,
   chatWrapperStyle,
   dayStyle,
   formStyle,
   inputStyle,
+  messageMarginStyle,
   timeStyle,
   userStyle,
 } from "./styles/chatStyle";
@@ -165,14 +167,14 @@ const ChatDetail = () => {
     }
   };
 
-// テキストエリアの高さを調整する関数
+  // テキストエリアの高さを調整する関数
   useEffect(() => {
     const resizeTextarea = () => {
       const textarea = textareaRef.current;
       if (!textarea) return;
 
       const lineHeight = parseInt(getComputedStyle(textarea).lineHeight, 12);
-      const lines = (msg + '\n').match(/\n/g)?.length || 1;
+      const lines = (msg + "\n").match(/\n/g)?.length || 1;
       textarea.style.height = `${lineHeight * lines}px`;
     };
 
@@ -188,6 +190,13 @@ const ChatDetail = () => {
       });
     }
   }, [setMsg, chatLogs]);
+
+  // getStrTime関数の結果をメモ化
+  const memoizedTimeStamps = useMemo(() => {
+    return chatLogs.map((message) => {
+      return getStrTime(message, chatLogs, message.senderId);
+    });
+  }, [chatLogs]);
 
   return (
     <div css={chatWrapperPositionStyle}>
@@ -224,10 +233,16 @@ const ChatDetail = () => {
                 // 新しい日付の場合のみ日付を表示
                 <p css={dayStyle}>{formatDateTime(item.date)}</p>
               )}
-              <div css={[balloonStyle, !isOwnMessage && balloonLeftStyle]}>
-                <div css={chatFlexStyle}>
+              <div
+                css={[
+                  balloonStyle,
+                  !isOwnMessage && balloonLeftStyle,
+                  memoizedTimeStamps[index] && messageMarginStyle,
+                ]}
+              >
+                <div css={[chatFlexStyle, !isOwnMessage && chatFlexLeftStyle]}>
                   <div css={chatUserFlexStyle}>
-                    {!isOwnMessage && (
+                    {!isOwnMessage && memoizedTimeStamps[index] && (
                       <img
                         src={
                           userInformation ? userInformation?.image : undefined
@@ -235,15 +250,22 @@ const ChatDetail = () => {
                         alt={userInformation?.name}
                         width={40}
                         height={40}
-                        css={chatUserIconStyle}
+                        css={[chatUserIconStyle, !memoizedTimeStamps[index] && chatUserNoIconStyle]}
                       />
                     )}
-
-                    <p css={[chatStyle, !isOwnMessage && chatLeftStyle]}>
+                    <p
+                      css={[
+                        chatStyle,
+                        memoizedTimeStamps[index] && chatFukidashiStyle,
+                        !isOwnMessage && chatLeftStyle,
+                      ]}
+                    >
                       {item.msg}
                     </p>
                   </div>
-                  <span css={timeStyle}>{getStrTime(item.date)}</span>
+                  {memoizedTimeStamps[index] && (
+                    <span css={timeStyle}>{memoizedTimeStamps[index]}</span>
+                  )}
                 </div>
               </div>
             </React.Fragment>

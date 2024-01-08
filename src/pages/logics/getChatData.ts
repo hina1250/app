@@ -1,4 +1,6 @@
 // ユーザー名 (localStrageに保存)
+import { ChatLog } from "../types/chatLogType";
+
 export const getUName = (): string | null => {
   let userName = localStorage.getItem("firebase-Chat1-username");
 
@@ -31,13 +33,35 @@ export const handleLogin = async (email: string, password: string) => {
   }
 };
 
-export const getStrTime = (time: Date | number) => {
-  let t = new Date(time);
-  return (
-    `${t.getHours()}`.padStart(2, "0") +
-    ":" +
-    `${t.getMinutes()}`.padStart(2, "0")
-  );
+export const getStrTime = (message: ChatLog, messages: ChatLog[], senderId: string) => {
+  const messageTime = new Date(message.date);
+
+  // 同じ時間に送信され、かつ同じ送信者のメッセージをフィルタリング
+  const sameTimeMessages = messages.filter((msg) => {
+    const msgTime = new Date(msg.date);
+    return (
+      messageTime.getDate() === msgTime.getDate() &&
+      messageTime.getHours() === msgTime.getHours() &&
+      messageTime.getMinutes() === msgTime.getMinutes() &&
+      msg.senderId === senderId // 送信者IDもチェック
+    );
+  });
+
+  // 最後に送信されたメッセージを確認
+  if (sameTimeMessages.length > 0) {
+    const lastMessage = sameTimeMessages[sameTimeMessages.length - 1];
+    if (lastMessage.id === message.id) {
+      // 現在のメッセージが最後のメッセージの場合、時間を表示
+      return (
+        `${messageTime.getHours()}`.padStart(2, "0") +
+        ":" +
+        `${messageTime.getMinutes()}`.padStart(2, "0")
+      );
+    }
+  }
+
+  // 他のメッセージは時間を表示しない
+  return null;
 };
 
 export const getTime = (time: Date | number) => {
@@ -73,7 +97,15 @@ export const getTime = (time: Date | number) => {
 
   // 日付の差が7日未満の場合は曜日を返す
   if (diffInDays < 7) {
-    const weekdays = ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"];
+    const weekdays = [
+      "日曜日",
+      "月曜日",
+      "火曜日",
+      "水曜日",
+      "木曜日",
+      "金曜日",
+      "土曜日",
+    ];
     return weekdays[inputDate.getDay()];
   }
 

@@ -12,6 +12,7 @@ import notificationIcon from "../assets/images/icon/notification.svg";
 import { useParams } from "react-router-dom";
 import { UserProfile } from "./types/userProfileType";
 import Modal from "../components/Modal";
+import LoginForm from "../components/LoginForm";
 
 const wrapperStyle = css`
   max-width: 600px;
@@ -73,38 +74,6 @@ const profileCommentStyle = css`
   font-size: 14px;
   color: #666666;
 `;
-
-type LoginFormProps = {
-  onLogin: (email: string, password: string) => void;
-};
-
-const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onLogin(email, password);
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="メールアドレス"
-      />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="パスワード"
-      />
-      <button type="submit">ログイン</button>
-    </form>
-  );
-};
 
 firebase.auth().onAuthStateChanged((user: firebase.User | null) => {
   if (user) {
@@ -220,6 +189,21 @@ const Home = () => {
     return () => unsubscribe();
   }, []);
 
+// ログインエラーの状態
+  const [loginError, setLoginError] = useState("");
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      // ログイン試行
+      await firebase.auth().signInWithEmailAndPassword(email, password);
+      // 成功した場合、エラーをクリア
+      setLoginError("");
+    } catch (error) {
+      // ログイン失敗
+      setLoginError("ログインに失敗しました。メールアドレスとパスワードを確認してください。");
+      console.error(error);
+    }
+  };
+
   // ログアウト処理
   const handleLogout = async () => {
     try {
@@ -240,7 +224,7 @@ const Home = () => {
   if (!isLoggedIn) {
     return (
       <div css={wrapperStyle}>
-        <LoginForm onLogin={handleLogin}></LoginForm>
+        <LoginForm onLogin={handleLogin} loginError={loginError} />
       </div>
     );
   }
@@ -258,7 +242,7 @@ const Home = () => {
               <img src={settingIcon} alt="設定" width={25} height={25} />
             </button>
           </div>
-          <LoginForm onLogin={handleLogin}></LoginForm>
+          <LoginForm onLogin={handleLogin} loginError={loginError} />
         </div>
       </div>
     );
@@ -278,7 +262,7 @@ const Home = () => {
           </button>
           {isLogoutModalOpen && (
             <Modal
-              text={"ログアウトしますか？"}
+              modalTitle={"ログアウトしますか？"}
               onClick={handleLogout}
               onCancel={() => {
                 setIsLogoutModalOpen(false);

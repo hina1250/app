@@ -76,7 +76,7 @@ const messageStyle = css`
   &:last-child {
     border-bottom: 1px solid #333;
   }
-  @media(max-width: 500px) {
+  @media (max-width: 500px) {
     grid-template-columns: 56px 1fr 40px;
   }
   @media (any-hover: hover) {
@@ -105,7 +105,7 @@ const messageTextStyle = css`
 const messageDateStyle = css`
   justify-self: flex-end;
   color: #999;
-  @media(max-width: 500px) {
+  @media (max-width: 500px) {
     font-size: 12px;
   }
 `;

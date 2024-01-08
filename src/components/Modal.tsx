@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 // ユーザープロフィールの型定義
-import { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { css } from "@emotion/react";
 import { UserProfile } from "../pages/types/userProfileType";
 
@@ -46,30 +46,36 @@ const cancelButtonStyle = css`
 // 編集モーダルコンポーネント
 type ModalProps = {
   /* テキスト */
-  text: string;
+  modalTitle?: string;
   /* ボタンのテキスト */
   buttonText: string;
   /* キャンセル処理 */
-  onCancel: () => void;
+  onCancel?: () => void;
   /* クリック処理 */
   onClick: () => void;
+  /** 子要素 */
+  children?: ReactNode;
 };
 
 // 編集モーダルコンポーネント
 const Modal: React.FC<ModalProps> = ({
-  text,
+  modalTitle,
   onCancel,
   onClick,
   buttonText,
+  children,
 }) => {
   return (
     <div css={modalWrapperStyle}>
-      <p>{text}</p>
+      {modalTitle && <p>{modalTitle}</p>}
+      <div>{children}</div>
       <div css={buttonsStyle}>
-        <button css={[buttonStyle, cancelButtonStyle]} onClick={onCancel}>
-          キャンセル
-        </button>
-        <button css={[buttonStyle]} onClick={onClick}>
+        {onCancel && (
+          <button css={[buttonStyle, cancelButtonStyle]} onClick={onCancel}>
+            キャンセル
+          </button>
+        )}
+        <button css={buttonStyle} onClick={onClick}>
           {buttonText}
         </button>
       </div>
