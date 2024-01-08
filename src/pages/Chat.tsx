@@ -77,7 +77,7 @@ const messageStyle = css`
     border-bottom: 1px solid #333;
   }
   @media (max-width: 500px) {
-    grid-template-columns: 56px 1fr 40px;
+    grid-template-columns: 56px 1fr 50px;
   }
   @media (any-hover: hover) {
     &:hover {
