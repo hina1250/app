@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import searchImg from "../assets/images/icon/search.svg";
-import userIcon from "../assets/images/manager/yamadahanako.jpg";
+import { getTime } from "./logics/getChatData";
+import firebase from "firebase/compat/app";
+import { Post } from "./types/postType";
 
 const wrapperStyle = css`
   padding-top: 20px;
@@ -55,7 +57,8 @@ const messageListStyle = css`
 `;
 
 const messageStyle = css`
-  display: flex;
+  display: grid;
+  grid-template-columns: 56px 1fr 70px;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
@@ -63,7 +66,16 @@ const messageStyle = css`
   border-top: 1px solid #333;
   transition: background-color 0.2s ease;
   & > img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
     border-radius: 50%;
+  }
+  &:last-child {
+    border-bottom: 1px solid #333;
+  }
+  @media (max-width: 500px) {
+    grid-template-columns: 56px 1fr 50px;
   }
   @media (any-hover: hover) {
     &:hover {
@@ -72,17 +84,66 @@ const messageStyle = css`
   }
 `;
 
-const messageTextStyle = css`
+const messageTextAreaStyle = css`
   width: 100%;
-  font-size: 13px;
   display: grid;
   gap: 3px;
 `;
 const messageUserStyle = css`
   font-size: 16px;
 `;
+const messageTextStyle = css`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  color: #999;
+`;
 
+const messageDateStyle = css`
+  white-space: nowrap;
+  justify-self: flex-end;
+  color: #999;
+  @media (max-width: 500px) {
+    font-size: 12px;
+  }
+`;
 const Board = () => {
+  const [post, setPost] = useState<Post[]>([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const postsSnapshot = await firebase
+        .firestore()
+        .collection("posts")
+        .orderBy("date", "desc")
+        .get();
+
+      const postsWithUserDetails = await Promise.all(
+        postsSnapshot.docs.map(async (doc) => {
+          const postData = doc.data() as Post;
+          const userId = postData.userId;
+          const userRef = firebase.firestore().collection("users").doc(userId);
+          const userDoc = await userRef.get();
+          const userData = userDoc.data();
+
+          return {
+            ...postData,
+            id: doc.id,
+            postId: doc.id,
+            date: new Date(postData.date),
+            senderImageURL: userData?.image,
+            senderName: userData?.name,
+          };
+        }),
+      );
+
+      setPost(postsWithUserDetails);
+    };
+
+    fetchPosts();
+  }, []);
+
   return (
     <>
       <div css={wrapperStyle}>
@@ -98,90 +159,25 @@ const Board = () => {
           </button>
         </div>
         <ul css={messageListStyle}>
-          <li>
-            <Link to="/contact/chat/chat-01" css={messageStyle}>
-              <img src={userIcon} alt="" width={56} height={56} />
-              <div css={messageTextStyle}>
-                <p css={messageUserStyle}>原田 涼子</p>
-                <p>連絡</p>
-              </div>
-              <div>
-                <span>13:28</span>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/contact/chat/chat-01" css={messageStyle}>
-              <img src={userIcon} alt="" width={56} height={56} />
-              <div css={messageTextStyle}>
-                <p css={messageUserStyle}>原田 涼子</p>
-                <p>おはよう！</p>
-              </div>
-              <div>
-                <span>13:28</span>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/contact/chat/chat-01" css={messageStyle}>
-              <img src={userIcon} alt="" width={56} height={56} />
-              <div css={messageTextStyle}>
-                <p css={messageUserStyle}>原田 涼子</p>
-                <p>おはよう！</p>
-              </div>
-              <div>
-                <span>13:28</span>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/contact/chat/chat-01" css={messageStyle}>
-              <img src={userIcon} alt="" width={56} height={56} />
-              <div css={messageTextStyle}>
-                <p css={messageUserStyle}>原田 涼子</p>
-                <p>おはよう！</p>
-              </div>
-              <div>
-                <span>13:28</span>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/contact/chat/chat-01" css={messageStyle}>
-              <img src={userIcon} alt="" width={56} height={56} />
-              <div css={messageTextStyle}>
-                <p css={messageUserStyle}>原田 涼子</p>
-                <p>おはよう！</p>
-              </div>
-              <div>
-                <span>13:28</span>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/contact/chat/chat-01" css={messageStyle}>
-              <img src={userIcon} alt="" width={56} height={56} />
-              <div css={messageTextStyle}>
-                <p css={messageUserStyle}>原田 涼子</p>
-                <p>おはよう！</p>
-              </div>
-              <div>
-                <span>13:28</span>
-              </div>
-            </Link>
-          </li>
-          <li>
-            <Link to="/contact/chat/chat-01" css={messageStyle}>
-              <img src={userIcon} alt="" width={56} height={56} />
-              <div css={messageTextStyle}>
-                <p css={messageUserStyle}>原田 涼子</p>
-                <p>おはよう！</p>
-              </div>
-              <div>
-                <span>13:28</span>
-              </div>
-            </Link>
-          </li>
+          {post
+            .sort((a, b) => b.date.getTime() - a.date.getTime())
+            .map((post, index) => (
+              <li key={index}>
+                <Link to={`/contact/board/${post.postId}`} css={messageStyle}>
+                  <img
+                    src={post.senderImageURL || undefined}
+                    alt={post.senderName}
+                    width={56}
+                    height={56}
+                  />
+                  <div css={messageTextAreaStyle}>
+                    <p css={messageUserStyle}>{post.title}</p>
+                    <p css={messageTextStyle}>{post.content}</p>
+                  </div>
+                  <span css={messageDateStyle}>{getTime(post.date)}</span>
+                </Link>
+              </li>
+            ))}
         </ul>
       </div>
     </>

@@ -58,7 +58,7 @@ type ModalProps = {
   /* キャンセル処理 */
   onCancel?: () => void;
   /* クリック処理 */
-  onClick: () => void;
+  onClick?: () => void;
   /** 子要素 */
   children?: ReactNode;
 };
@@ -75,16 +75,18 @@ const Modal: React.FC<ModalProps> = ({
     <div css={modalWrapperStyle}>
       {modalTitle && <p>{modalTitle}</p>}
       <div>{children}</div>
-      <div css={buttonsStyle}>
-        {onCancel && (
-          <button css={[buttonStyle, cancelButtonStyle]} onClick={onCancel}>
-            キャンセル
+      {onClick && (
+        <div css={buttonsStyle}>
+          {onCancel && (
+            <button css={[buttonStyle, cancelButtonStyle]} onClick={onCancel}>
+              キャンセル
+            </button>
+          )}
+          <button css={buttonStyle} onClick={onClick}>
+            {buttonText}
           </button>
-        )}
-        <button css={buttonStyle} onClick={onClick}>
-          {buttonText}
-        </button>
-      </div>
+        </div>
+      )}
     </div>
   );
 };

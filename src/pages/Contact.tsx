@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import React, { FC, useEffect, useState } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Tab } from "@headlessui/react";
 import plusIcon from "../assets/images/icon/plus.svg";
 import ChatUserModal from "../components/ChatUserModal";
 import { UserIdProfile } from "./types/userProfileType";
 import firebase from "firebase/compat/app";
 import db from "../firebaseConfig";
+import NewPostModal from "../components/NewPostModal";
 
 const wrapperStyle = css`
   max-width: 600px;
@@ -116,10 +117,26 @@ const modalUserCommentStyle = css`
 `;
 
 const Contact = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNewChatModalOpen, setIsNewChatModalOpen] = useState(false);
+  const [isNewPostModalOpen, setIsNewPostModalOpen] = useState(false);
   const [users, setUsers] = useState<UserIdProfile[]>([]);
+  const [newPost, setNewPost] = useState("");
+  const [newPostTitle, setNewPostTitle] = useState("");
+  const [isSelectedTab, setIsSelectedTab] = useState("chat");
   const loggedInUserId = firebase.auth().currentUser?.uid;
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // リロード時などに、アクティブなタブと開いている画面が異ならないようにする
+  useEffect(() => {
+    // 現在のパスからタブの状態を決定するロジック
+    const path = location.pathname;
+    if (path.includes("/contact/chat")) {
+      setIsSelectedTab("chat");
+    } else if (path.includes("/contact/board")) {
+      setIsSelectedTab("board");
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -143,11 +160,27 @@ const Contact = () => {
     navigate(`/contact/chat/${userId}`);
   };
 
+  const handlePlusButtonClick = () => {
+    // 現在のパスに応じて異なる状態を設定
+    if (location.pathname.includes("/contact/chat")) {
+      setIsNewChatModalOpen(true);
+    } else if (location.pathname.includes("/contact/board")) {
+      setIsNewPostModalOpen(true);
+    }
+  };
+
+  const handleNewPostTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPostTitle(e.target.value);
+  };
+  const handleNewPostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewPost(e.target.value);
+  };
+
   return (
     <div css={wrapperStyle}>
       <div css={titleWrapperStyle}>
         <h1 css={titleStyle}>連絡</h1>
-        <button onClick={() => setIsModalOpen(true)}>
+        <button onClick={handlePlusButtonClick}>
           <img src={plusIcon} alt="追加" />
         </button>
       </div>
@@ -155,25 +188,25 @@ const Contact = () => {
       <Tab.Group>
         <Tab.List css={tabListStyle}>
           <Tab as={Link} to="chat">
-            {({ selected }) => (
-              <div css={[tabStyle, selected && selectedTabStyle]}>
-                <p>メッセージ</p>
-              </div>
-            )}
+            <div css={[tabStyle, isSelectedTab === "chat" && selectedTabStyle]}>
+              <p>メッセージ</p>
+            </div>
           </Tab>
           <Tab as={Link} to="board">
-            {({ selected }) => (
-              <div css={[tabStyle, selected && selectedTabStyle]}>
-                <p>掲示板</p>
-              </div>
-            )}
+            <div
+              css={[tabStyle, isSelectedTab === "board" && selectedTabStyle]}
+            >
+              <p>掲示板</p>
+            </div>
           </Tab>
         </Tab.List>
       </Tab.Group>
       <div css={tabPanelStyle}>
-        <Outlet context={{ isModalOpen, setIsModalOpen, users }} />
-        {isModalOpen && (
-          <ChatUserModal onClose={() => setIsModalOpen(false)}>
+        <Outlet
+          context={{ isNewChatModalOpen, setIsNewChatModalOpen, users }}
+        />
+        {isNewChatModalOpen && (
+          <ChatUserModal onClose={() => setIsNewChatModalOpen(false)}>
             {users.map((user) => (
               <button
                 css={listStyle}
@@ -194,6 +227,15 @@ const Contact = () => {
               </button>
             ))}
           </ChatUserModal>
+        )}
+        {isNewPostModalOpen && (
+          <NewPostModal
+            newPostTitle={newPostTitle}
+            newPost={newPost}
+            onNewPostTitleChange={handleNewPostTitleChange}
+            onNewPostChange={handleNewPostChange}
+            onClose={() => setIsNewPostModalOpen(false)}
+          />
         )}
       </div>
     </div>

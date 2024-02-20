@@ -15,6 +15,7 @@ import mailIcon from "./assets/images/icon/mail.svg";
 import ChatDetail from "./pages/ChatDetail";
 import Board from "./pages/Board";
 import Chat from "./pages/Chat";
+import PostDetail from "./pages/PostDetail";
 
 const wrapperStyle = css`
   background-color: #333;
@@ -211,6 +212,7 @@ const App = () => {
         </Route>
 
         <Route path="/contact/chat/:chatId" element={<ChatDetail />} />
+        <Route path="/contact/board/:postId" element={<PostDetail />} />
       </Routes>
     </div>
   );
