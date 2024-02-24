@@ -34,8 +34,8 @@ export const handleLogin = async (email: string, password: string) => {
 };
 
 export const getStrTime = (
-  message: ChatLog,
-  messages: ChatLog[],
+  message: any,
+  messages: any[],
   senderId: string,
 ) => {
   const messageTime = new Date(message.date);

@@ -94,6 +94,7 @@ export const chatStyle = css`
   color: #fff;
   white-space: pre-wrap;
   font-size: 14px;
+  font-weight: 400;
 `;
 export const chatFukidashiStyle = css`
   &::after {
@@ -135,6 +136,7 @@ export const chatUserFlexStyle = css`
 `;
 export const chatUserIconStyle = css`
   border-radius: 50%;
+  min-width: 40px;
   width: 40px;
   height: 40px;
   object-fit: cover;

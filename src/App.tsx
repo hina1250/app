@@ -15,7 +15,7 @@ import mailIcon from "./assets/images/icon/mail.svg";
 import ChatDetail from "./pages/ChatDetail";
 import Board from "./pages/Board";
 import Chat from "./pages/Chat";
-import PostDetail from "./pages/PostDetail";
+import BoardDetail from "./pages/BoardDetail";
 
 const wrapperStyle = css`
   background-color: #333;
@@ -121,8 +121,11 @@ const App = () => {
   const [isTabListHidden, setIsTabListHidden] = useState(false);
 
   useEffect(() => {
-    // ChatDetail ページにいるときはタブメニューを非表示にする
-    setIsTabListHidden(location.pathname.includes("/contact/chat/"));
+    // ChatDetailまたはBoardDetailページにいるときはタブメニューを非表示にする
+    const isHidden =
+      location.pathname.includes("/contact/chat/") ||
+      location.pathname.includes("/contact/board/");
+    setIsTabListHidden(isHidden);
   }, [location]);
 
   // パスに基づいて選択されたタブのインデックスを設定
@@ -212,7 +215,7 @@ const App = () => {
         </Route>
 
         <Route path="/contact/chat/:chatId" element={<ChatDetail />} />
-        <Route path="/contact/board/:postId" element={<PostDetail />} />
+        <Route path="/contact/board/:postId" element={<BoardDetail />} />
       </Routes>
     </div>
   );
