@@ -31,11 +31,11 @@ import { formatDateTime, formatDateTime2 } from "./logics/getDay";
 import { Link, useParams } from "react-router-dom";
 import { UserIdProfile } from "./types/userProfileType";
 import { Post } from "./types/postType";
-import {CommentType, CommentWithUserInfo} from "./types/commentType";
+import { CommentType, CommentWithUserInfo } from "./types/commentType";
 import { getStrTime } from "./logics/getChatData";
 
 const postWrapperStyle = css`
-  margin-bottom: 180px;
+  margin-bottom: 160px;
 `;
 
 const postInfoStyle = css`
@@ -54,14 +54,24 @@ const postDayStyle = css`
 `;
 
 const postStyle = css`
+  display: grid;
+  gap: 20px;
   padding: 20px;
   width: 100%;
-  line-height: 2;
   font-weight: bold;
 `;
 
+const postTitleStyle = css`
+  color: #3c75a7;
+`;
+
+const postContentStyle = css`
+  line-height: 2;
+`;
+
 const titleStyle = css`
-  width: 350px;
+  max-width: 350px;
+  width: 60vw;
   font-size: 18px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -115,11 +125,19 @@ const BoardDetail = () => {
     if (!postId) return;
 
     const fetchComments = async () => {
-      const snapshot = await db.collection("posts").doc(postId).collection("comments").orderBy("date", "asc").get();
+      const snapshot = await db
+        .collection("posts")
+        .doc(postId)
+        .collection("comments")
+        .orderBy("date", "asc")
+        .get();
       const commentsWithUserInfo: CommentWithUserInfo[] = await Promise.all(
         snapshot.docs.map(async (doc) => {
           const data = doc.data();
-          const userSnapshot = await db.collection("users").doc(data.senderId).get();
+          const userSnapshot = await db
+            .collection("users")
+            .doc(data.senderId)
+            .get();
           const userData = userSnapshot.data();
 
           return {
@@ -130,7 +148,7 @@ const BoardDetail = () => {
             userName: userData?.name,
             userImage: userData?.image,
           };
-        })
+        }),
       );
 
       setComments(commentsWithUserInfo);
@@ -138,7 +156,6 @@ const BoardDetail = () => {
 
     fetchComments();
   }, [postId]);
-
 
   // 投稿用の参照を生成（postIdに基づいて動的に変更）
   const [, setPostRef] =
@@ -260,11 +277,11 @@ const BoardDetail = () => {
           {post && (
             <React.Fragment>
               <div css={postInfoStyle}>
-                <div css={[ postDayStyle]}>
+                <div css={postDayStyle}>
                   <img src={clockIcon} alt="" width={16} height={16} />
                   {formatDateTime2(post.date)}
                 </div>
-                <div css={[postDayStyle]}>
+                <div css={postDayStyle}>
                   <img src={penIcon} alt="" width={16} height={16} />
                   {userInformation?.name}
                 </div>
@@ -293,7 +310,7 @@ const BoardDetail = () => {
                         css={chatUserIconStyle}
                       />
                     )}
-                    <p
+                    <div
                       css={[
                         chatStyle,
                         chatFukidashiStyle,
@@ -301,8 +318,9 @@ const BoardDetail = () => {
                         postStyle,
                       ]}
                     >
-                      {post.content}
-                    </p>
+                      <h3 css={postTitleStyle}>{post.title}</h3>
+                      <p css={postContentStyle}>{post.content}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -332,7 +350,7 @@ const BoardDetail = () => {
                           {!isOwnMessage && (
                             <img
                               src={item.userImage || undefined}
-                              alt={item.userName || 'Unknown'}
+                              alt={item.userName || "Unknown"}
                               width={40}
                               height={40}
                               css={chatUserIconStyle}

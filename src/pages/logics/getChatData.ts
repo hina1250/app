@@ -33,11 +33,7 @@ export const handleLogin = async (email: string, password: string) => {
   }
 };
 
-export const getStrTime = (
-  message: any,
-  messages: any[],
-  senderId: string,
-) => {
+export const getStrTime = (message: any, messages: any[], senderId: string) => {
   const messageTime = new Date(message.date);
 
   // 同じ時間に送信され、かつ同じ送信者のメッセージをフィルタリング
